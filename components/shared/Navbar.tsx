@@ -5,6 +5,7 @@ import { MouseEventHandler } from 'react';
 import useTheme from 'hooks/useTheme';
 import app from '@/lib/app';
 import env from '@/lib/env';
+import Image from 'next/image';
 
 export default function Navbar({
   toggleSidebar,
@@ -52,7 +53,13 @@ export default function Navbar({
             <div className="flex items-center text-xl font-bold lg:ml-2.5">
               <Link href="/">
                 <span className="self-center whitespace-nowrap">
-                  {app.name}
+                <Image
+                  src={app.logoUrl}
+                  className="mx-auto h-12 w-auto"
+                  alt={app.name}
+                  width={10}
+                  height={10}
+                />
                 </span>
               </Link>
             </div>

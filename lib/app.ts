@@ -2,9 +2,9 @@ import packageInfo from '../package.json';
 
 const app = {
   version: packageInfo.version,
-  name: 'BoxyHQ',
-  location: 'Imaginary Location, London, UK',
-  logoUrl: 'https://boxyhq.com/img/logo.png',
+  name: 'Gravity ISP',
+  location: 'João Pessoa, Paraíba, Brasil',
+  logoUrl: '/logo-big-white.svg',
   url: 'http://localhost:4002',
 };
 
