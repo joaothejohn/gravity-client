@@ -75,7 +75,7 @@ export default forwardRef<HTMLElement, { isCollapsed: boolean }>(
     return (
       <>
         <aside
-          className={`fixed ${!isCollapsed && 'z-10'} h-screen w-10/12 lg:w-64`}
+          className={`fixed ${!isCollapsed && 'z-10'} h-screen w-6/12 lg:w-64`}
           ref={ref}
           aria-label="Sidebar"
         >
