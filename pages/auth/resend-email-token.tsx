@@ -13,6 +13,7 @@ import { toast } from 'react-hot-toast';
 import { useTranslation } from 'next-i18next';
 import { ApiResponse, NextPageWithLayout } from 'types';
 import * as Yup from 'yup';
+import { SUPPORTED_LANGUAGES } from '@/lib/language';
 
 const VerifyAccount: NextPageWithLayout<
   InferGetServerSidePropsType<typeof getServerSideProps>
@@ -112,7 +113,7 @@ export const getServerSideProps = async (
 
   return {
     props: {
-      ...(locale ? await serverSideTranslations(locale, ['common']) : {}),
+      ...(locale ? await serverSideTranslations(locale, ['common'], null, SUPPORTED_LANGUAGES) : {}),
     },
   };
 };

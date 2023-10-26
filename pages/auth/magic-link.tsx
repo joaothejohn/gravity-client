@@ -1,5 +1,6 @@
 import { AuthLayout } from '@/components/layouts';
 import { InputWithLabel, Loading } from '@/components/shared';
+import { SUPPORTED_LANGUAGES } from '@/lib/language';
 import env from '@/lib/env';
 import { useFormik } from 'formik';
 import type {
@@ -130,7 +131,7 @@ export const getServerSideProps = async (
 
   return {
     props: {
-      ...(locale ? await serverSideTranslations(locale, ['common']) : {}),
+      ...(locale ? await serverSideTranslations(locale, ['common'], null, SUPPORTED_LANGUAGES) : {}),
       csrfToken: await getCsrfToken(context),
     },
   };

@@ -11,6 +11,7 @@ import PricingSection from '@/components/defaultLanding/PricingSection';
 import useTheme from 'hooks/useTheme';
 import env from '@/lib/env';
 import Head from 'next/head';
+import { SUPPORTED_LANGUAGES } from '@/lib/language';
 
 const Home: NextPageWithLayout = () => {
   const { toggleTheme, selectedTheme } = useTheme();
@@ -27,7 +28,7 @@ const Home: NextPageWithLayout = () => {
         <div className="navbar bg-base-100 px-0 sm:px-1">
           <div className="flex-1">
             <Link href="/" className="btn-ghost btn text-xl normal-case">
-              BoxyHQ
+              Gravity ISP
             </Link>
           </div>
           <div className="flex-none">
@@ -90,7 +91,7 @@ export const getServerSideProps = async (
 
   return {
     props: {
-      ...(locale ? await serverSideTranslations(locale, ['common']) : {}),
+      ...(locale ? await serverSideTranslations(locale, ['common'], null, SUPPORTED_LANGUAGES) : {}),
     },
   };
 };

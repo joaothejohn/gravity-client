@@ -9,6 +9,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import styles from 'styles/sdk-override.module.css';
 import env from '@/lib/env';
 import { useRouter } from 'next/router';
+import { SUPPORTED_LANGUAGES } from '@/lib/language';
 
 const CREATE_SSO_CSS = {
   input: `${styles['sdk-input']} input input-bordered`,
@@ -143,7 +144,7 @@ export async function getServerSideProps({
 
   return {
     props: {
-      ...(locale ? await serverSideTranslations(locale, ['common']) : {}),
+      ...(locale ? await serverSideTranslations(locale, ['common'], null, SUPPORTED_LANGUAGES) : {}),
       teamFeatures: env.teamFeatures,
     },
   };

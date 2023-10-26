@@ -15,6 +15,7 @@ import { Button } from 'react-daisyui';
 import { toast } from 'react-hot-toast';
 import type { ApiResponse } from 'types';
 import env from '@/lib/env';
+import { SUPPORTED_LANGUAGES } from '@/lib/language';
 
 const DirectorySync = ({ teamFeatures }) => {
   const router = useRouter();
@@ -124,7 +125,7 @@ export async function getServerSideProps({
 
   return {
     props: {
-      ...(locale ? await serverSideTranslations(locale, ['common']) : {}),
+      ...(locale ? await serverSideTranslations(locale, ['common'], null, SUPPORTED_LANGUAGES) : {}),
       teamFeatures: env.teamFeatures,
     },
   };

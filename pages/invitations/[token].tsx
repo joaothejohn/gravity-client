@@ -1,6 +1,7 @@
 import { AuthLayout } from '@/components/layouts';
 import { Error, Loading } from '@/components/shared';
 import { defaultHeaders } from '@/lib/common';
+import { SUPPORTED_LANGUAGES } from '@/lib/language';
 import { setCookie } from 'cookies-next';
 import useInvitation from 'hooks/useInvitation';
 import type { GetServerSidePropsContext } from 'next';
@@ -143,7 +144,7 @@ export const getServerSideProps = async (
 
   return {
     props: {
-      ...(locale ? await serverSideTranslations(locale, ['common']) : {}),
+      ...(locale ? await serverSideTranslations(locale, ['common'], null, SUPPORTED_LANGUAGES) : {}),
     },
   };
 };

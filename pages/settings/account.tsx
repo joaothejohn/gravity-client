@@ -6,6 +6,7 @@ import { getSession } from '@/lib/session';
 import { getUserBySession } from 'models/user';
 import { inferSSRProps } from '@/lib/inferSSRProps';
 import { UpdateAccount } from '@/components/account';
+import { SUPPORTED_LANGUAGES } from '@/lib/language';
 
 type AccountProps = NextPageWithLayout<
   inferSSRProps<typeof getServerSideProps>
@@ -30,7 +31,7 @@ export const getServerSideProps = async (
 
   return {
     props: {
-      ...(locale ? await serverSideTranslations(locale, ['common']) : {}),
+      ...(locale ? await serverSideTranslations(locale, ['common'], null, SUPPORTED_LANGUAGES) : {}),
       user: JSON.parse(JSON.stringify(user)),
     },
   };

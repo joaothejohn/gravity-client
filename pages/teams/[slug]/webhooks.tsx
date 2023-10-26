@@ -6,6 +6,7 @@ import { GetServerSidePropsContext } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import env from '@/lib/env';
+import { SUPPORTED_LANGUAGES } from '@/lib/language';
 
 const WebhookList = ({ teamFeatures }) => {
   const { t } = useTranslation('common');
@@ -42,7 +43,7 @@ export async function getServerSideProps({
 
   return {
     props: {
-      ...(locale ? await serverSideTranslations(locale, ['common']) : {}),
+      ...(locale ? await serverSideTranslations(locale, ['common'], null, SUPPORTED_LANGUAGES) : {}),
       teamFeatures: env.teamFeatures,
     },
   };

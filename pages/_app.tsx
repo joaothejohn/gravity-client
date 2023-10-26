@@ -18,7 +18,6 @@ import { Themer } from '@boxyhq/react-ui/shared';
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const { session, ...props } = pageProps;
 
-  // Add mixpanel
   useEffect(() => {
     if (env.mixpanel.token) {
       mixpanel.init(env.mixpanel.token, {

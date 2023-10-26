@@ -3,6 +3,7 @@ import { Error, Loading } from '@/components/shared';
 import { TeamTab } from '@/components/team';
 import env from '@/lib/env';
 import { inferSSRProps } from '@/lib/inferSSRProps';
+import { SUPPORTED_LANGUAGES } from '@/lib/language';
 import { getViewerToken } from '@/lib/retraced';
 import { getSession } from '@/lib/session';
 import useCanAccess from 'hooks/useCanAccess';
@@ -93,7 +94,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
     return {
       props: {
-        ...(locale ? await serverSideTranslations(locale, ['common']) : {}),
+        ...(locale ? await serverSideTranslations(locale, ['common'], null, SUPPORTED_LANGUAGES) : {}),
         error: null,
         auditLogToken: auditLogToken ?? '',
         retracedHost: env.retraced.url ?? '',
@@ -104,7 +105,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     const { message } = error as { message: string };
     return {
       props: {
-        ...(locale ? await serverSideTranslations(locale, ['common']) : {}),
+        ...(locale ? await serverSideTranslations(locale, ['common'], null, SUPPORTED_LANGUAGES) : {}),
         error: {
           message,
         },

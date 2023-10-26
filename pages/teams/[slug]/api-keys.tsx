@@ -2,6 +2,7 @@ import APIKeysContainer from '@/components/apiKey/APIKeysContainer';
 import { GetServerSidePropsContext } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import env from '@/lib/env';
+import { SUPPORTED_LANGUAGES } from '@/lib/language';
 
 const APIKeys = ({ teamFeatures }) => {
   return <APIKeysContainer teamFeatures={teamFeatures} />;
@@ -18,7 +19,7 @@ export async function getServerSideProps({
 
   return {
     props: {
-      ...(locale ? await serverSideTranslations(locale, ['common']) : {}),
+      ...(locale ? await serverSideTranslations(locale, ['common'], null, SUPPORTED_LANGUAGES) : {}),
       teamFeatures: env.teamFeatures,
     },
   };

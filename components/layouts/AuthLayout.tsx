@@ -2,6 +2,7 @@ import app from '@/lib/app';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import Image from 'next/image';
+import LanguageSelector from '@/components/shared/LanguageSelector';
 
 interface AuthLayoutProps {
   children: React.ReactNode;
@@ -18,6 +19,9 @@ export default function AuthLayout({
 
   return (
     <>
+      <div className="flex justify-end">
+        <LanguageSelector />
+      </div>
       <Head>
         <title>{t('heading')}</title>
       </Head>
@@ -26,10 +30,10 @@ export default function AuthLayout({
           <div>
             <Image
               src={app.logoUrl}
-              className="mx-auto h-12 w-auto"
+              className="mx-auto h-24 w-auto"
               alt={app.name}
-              width={48}
-              height={48}
+              width={10}
+              height={10}
             />
             {heading && (
               <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-white">
