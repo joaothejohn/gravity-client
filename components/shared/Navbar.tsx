@@ -6,6 +6,7 @@ import useTheme from 'hooks/useTheme';
 import app from '@/lib/app';
 import env from '@/lib/env';
 import Image from 'next/image';
+import LanguageSelector from '@/components/shared/LanguageSelector';
 
 export default function Navbar({
   toggleSidebar,
@@ -73,7 +74,10 @@ export default function Navbar({
                 <selectedTheme.icon className="w-5 h-5" />
               </button>
             )}
-            <Button size="sm" variant="outline" onClick={() => signOut()}>
+            <div className="flex justify-end">
+              <LanguageSelector />
+            </div>
+            <Button size="sm" className="border border-gray-300 dark:border-gray-600" variant="outline" onClick={() => signOut()}>
               Sign Out
             </Button>
           </div>

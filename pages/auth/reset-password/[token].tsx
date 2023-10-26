@@ -1,5 +1,6 @@
 import { ResetPasswordForm } from '@/components/auth';
 import { AuthLayout } from '@/components/layouts';
+import { SUPPORTED_LANGUAGES } from '@/lib/language';
 import type { GetServerSidePropsContext } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { ReactElement } from 'react';
@@ -24,7 +25,7 @@ export const getServerSideProps = async (
 
   return {
     props: {
-      ...(locale ? await serverSideTranslations(locale, ['common']) : {}),
+      ...(locale ? await serverSideTranslations(locale, ['common'], null, SUPPORTED_LANGUAGES) : {}),
     },
   };
 };

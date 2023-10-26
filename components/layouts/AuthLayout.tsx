@@ -2,6 +2,7 @@ import app from '@/lib/app';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import Image from 'next/image';
+import LanguageSelector from '@/components/shared/LanguageSelector';
 
 interface AuthLayoutProps {
   children: React.ReactNode;
@@ -18,6 +19,9 @@ export default function AuthLayout({
 
   return (
     <>
+      <div className="flex justify-end">
+        <LanguageSelector />
+      </div>
       <Head>
         <title>{t('heading')}</title>
       </Head>

@@ -17,6 +17,7 @@ import JoinWithInvitation from '@/components/auth/JoinWithInvitation';
 import Head from 'next/head';
 import { Loading } from '@/components/shared';
 import env from '@/lib/env';
+import { SUPPORTED_LANGUAGES } from '@/lib/language';
 
 const Signup: NextPageWithLayout<
   InferGetServerSidePropsType<typeof getServerSideProps>
@@ -102,7 +103,7 @@ export const getServerSideProps = async (
 
   return {
     props: {
-      ...(locale ? await serverSideTranslations(locale, ['common']) : {}),
+      ...(locale ? await serverSideTranslations(locale, ['common'], null, SUPPORTED_LANGUAGES) : {}),
       authProviders: authProviderEnabled(),
       recaptchaSiteKey: env.recaptcha.siteKey,
     },

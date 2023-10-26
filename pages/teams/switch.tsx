@@ -1,4 +1,5 @@
 import { AuthLayout } from '@/components/layouts';
+import { SUPPORTED_LANGUAGES } from '@/lib/language';
 import { getSession } from '@/lib/session';
 import { deleteCookie } from 'cookies-next';
 import { getTeams } from 'models/team';
@@ -61,7 +62,7 @@ export const getServerSideProps = async (
 
   return {
     props: {
-      ...(locale ? await serverSideTranslations(locale, ['common']) : {}),
+      ...(locale ? await serverSideTranslations(locale, ['common'], null, SUPPORTED_LANGUAGES) : {}),
       teams: JSON.parse(JSON.stringify(teams)),
     },
   };

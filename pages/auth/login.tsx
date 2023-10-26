@@ -27,6 +27,7 @@ import TogglePasswordVisibility from '@/components/shared/TogglePasswordVisibili
 import AgreeMessage from '@/components/auth/AgreeMessage';
 import GoogleReCAPTCHA from '@/components/shared/GoogleReCAPTCHA';
 import ReCAPTCHA from 'react-google-recaptcha';
+import { SUPPORTED_LANGUAGES } from '@/lib/language';
 
 interface Message {
   text: string | null;
@@ -235,7 +236,7 @@ export const getServerSideProps = async (
 
   return {
     props: {
-      ...(locale ? await serverSideTranslations(locale, ['common']) : {}),
+      ...(locale ? await serverSideTranslations(locale, ['common'], null, SUPPORTED_LANGUAGES) : {}),
       csrfToken: await getCsrfToken(context),
       authProviders: authProviderEnabled(),
       recaptchaSiteKey: env.recaptcha.siteKey,

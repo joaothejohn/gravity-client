@@ -1,4 +1,5 @@
 import { Loading } from '@/components/shared';
+import { SUPPORTED_LANGUAGES } from '@/lib/language';
 import useTeams from 'hooks/useTeams';
 import { GetServerSidePropsContext } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -28,7 +29,7 @@ const Dashboard: NextPageWithLayout = () => {
 export async function getStaticProps({ locale }: GetServerSidePropsContext) {
   return {
     props: {
-      ...(locale ? await serverSideTranslations(locale, ['common']) : {}),
+      ...(locale ? await serverSideTranslations(locale, ['common'], null, SUPPORTED_LANGUAGES) : {}),
     },
   };
 }

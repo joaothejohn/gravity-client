@@ -1,6 +1,7 @@
 import { AuthLayout } from '@/components/layouts';
 import { InputWithLabel, Loading } from '@/components/shared';
 import env from '@/lib/env';
+import { SUPPORTED_LANGUAGES } from '@/lib/language';
 import { useFormik } from 'formik';
 import { GetServerSidePropsContext } from 'next';
 import { signIn, useSession } from 'next-auth/react';
@@ -109,7 +110,7 @@ SSO.getLayout = function getLayout(page: ReactElement) {
 export async function getStaticProps({ locale }: GetServerSidePropsContext) {
   return {
     props: {
-      ...(locale ? await serverSideTranslations(locale, ['common']) : {}),
+      ...(locale ? await serverSideTranslations(locale, ['common'], null, SUPPORTED_LANGUAGES) : {}),
     },
   };
 }
