@@ -36,6 +36,8 @@ export type AppEvent =
   | 'invitation.created'
   | 'invitation.removed'
   | 'invitation.fetched'
+  | 'invitation.failed'
+  | 'invitation.email.failed'
   | 'member.created'
   | 'member.removed'
   | 'member.left'
