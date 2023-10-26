@@ -3,7 +3,6 @@ import {
   Body,
   Container,
   Hr,
-  Img,
   Section,
   Tailwind,
   Text,
