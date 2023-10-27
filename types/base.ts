@@ -8,13 +8,13 @@ export type ApiError = {
 
 export type ApiResponse<T = unknown> =
   | {
-      data: T;
-      error: never;
-    }
+    data: T;
+    error: never;
+  }
   | {
-      data: never;
-      error: ApiError;
-    };
+    data: never;
+    error: ApiError;
+  };
 
 export type Role = 'owner' | 'member';
 
@@ -74,4 +74,21 @@ export interface TeamFeature {
   auditLog: boolean;
   webhook: boolean;
   apiKey: boolean;
+}
+
+export interface IRadiusUser {
+  userName: string
+  password: string
+  ip: string
+  planId: string
+}
+
+export interface IPlanUser {
+  name: string
+  maxLimit: string
+  limitAt: string
+  priority: string
+  burstLimit: string
+  burstThreshold: string
+  burstTime: string
 }

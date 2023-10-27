@@ -87,6 +87,10 @@ const env = {
     siteKey: process.env.RECAPTCHA_SITE_KEY || null,
     secretKey: process.env.RECAPTCHA_SECRET_KEY || null,
   },
+
+  radiusServer: {
+    host: process.env.RADIUS_SERVER_HOST,
+  },
 };
 
 export default env;
