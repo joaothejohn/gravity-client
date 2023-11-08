@@ -8,6 +8,7 @@ export const createUser = async (param: {
   name: string;
   email: string;
   password?: string;
+  isAdmin?: boolean;
 }) => {
   const { name, email, password } = param;
 

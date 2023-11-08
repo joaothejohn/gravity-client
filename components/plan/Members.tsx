@@ -1,5 +1,5 @@
 import { Error, LetterAvatar, Loading } from '@/components/shared';
-import { Team, TeamMember, User } from '@prisma/client';
+import { Team, TeamMember } from '@prisma/client';
 import useCanAccess from 'hooks/useCanAccess';
 import useTeamMembers from 'hooks/useTeamMembers';
 import { useSession } from 'next-auth/react';
@@ -14,7 +14,7 @@ import type { ApiResponse } from 'types';
 import ConfirmationDialog from '../shared/ConfirmationDialog';
 import { useState } from 'react';
 
-const Members = ({ team, user }: { team: Team, user: User }) => {
+const Members = ({ team }: { team: Team }) => {
   const { data: session } = useSession();
   const { t } = useTranslation('common');
   const { canAccess } = useCanAccess();
@@ -152,7 +152,7 @@ const Members = ({ team, user }: { team: Team, user: User }) => {
       >
         {t('delete-member-warning')}
       </ConfirmationDialog>
-      <InviteMember visible={visible} setVisible={setVisible} user={user} team={team} />
+      <InviteMember visible={visible} setVisible={setVisible} team={team} />
     </div>
   );
 };

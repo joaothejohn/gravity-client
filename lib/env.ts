@@ -1,7 +1,7 @@
 const env = {
   databaseUrl: `${process.env.DATABASE_URL}`,
   appUrl: `${process.env.APP_URL}`,
-  product: 'boxyhq',
+  product: 'gravity',
   redirectIfAuthenticated: '/dashboard',
 
   // SAML Jackson configuration
@@ -89,7 +89,7 @@ const env = {
   },
 
   radiusServer: {
-    host: process.env.RADIUS_SERVER_HOST,
+    host: process.env.NEXT_PUBLIC_RADIUS_SERVER_HOST,
   },
 };
 

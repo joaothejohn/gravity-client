@@ -1,3 +1,3 @@
-export const formatData = (data: any): any => {
+export function formatData<T>(data: T): T {
   return data;
 };

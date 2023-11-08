@@ -92,3 +92,25 @@ export interface IPlanUser {
   burstThreshold: string
   burstTime: string
 }
+
+export interface IRadiusUserResponse {
+  userId: string
+  domainId: string
+  domain?: string | null
+  userPlan?: string | null
+  userName: string
+  password: null
+  ip: string
+  planId: string
+}
+
+export interface IPlanUserResponse {
+  planId: string
+  name: string
+  maxLimit: string
+  limitAt: string
+  priority: string
+  burstLimit: string
+  burstThreshold: string
+  burstTime: string
+}

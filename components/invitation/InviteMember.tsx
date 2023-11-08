@@ -1,6 +1,6 @@
 import { defaultHeaders } from '@/lib/common';
 import { availableRoles } from '@/lib/permissions';
-import type { Invitation, Team } from '@prisma/client';
+import { type Invitation, type Team, User } from '@prisma/client';
 import { useFormik } from 'formik';
 import useInvitations from 'hooks/useInvitations';
 import { useTranslation } from 'next-i18next';
@@ -16,6 +16,7 @@ const InviteMember = ({
   team,
 }: {
   visible: boolean;
+  user?: User | null;
   setVisible: (visible: boolean) => void;
   team: Team;
 }) => {
@@ -87,7 +88,7 @@ const InviteMember = ({
                 }
                 onChange={formik.handleChange}
                 value={formik.values.email}
-                placeholder="jackson@boxyhq.com"
+                placeholder="jackson@gravity.com"
                 required
               />
               <select

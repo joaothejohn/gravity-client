@@ -35,10 +35,7 @@ const LanguageSelector = () => {
   }, [])
 
   useEffect(() => {
-    handleLanguageCookie();
-  }, [router.pathname]);
-
-  useEffect(() => {
+    if (router.pathname === '/_error') return
     if (router.locale !== currentLanguage) {
       handleSetCurrentLanguage(currentLanguage);
     }

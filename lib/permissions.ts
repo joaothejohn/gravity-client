@@ -3,6 +3,7 @@ import { Role } from '@prisma/client';
 export type RoleType = (typeof Role)[keyof typeof Role];
 export type Action = 'create' | 'update' | 'read' | 'delete' | 'leave';
 export type Resource =
+  | 'dashboard'
   | 'team'
   | 'team_member'
   | 'team_invitation'
@@ -23,6 +24,10 @@ export type Permission = {
 
 export const availableRoles = [
   {
+    id: Role.SUPER_ADMIN,
+    name: 'Super Admin',
+  },
+  {
     id: Role.MEMBER,
     name: 'Member',
   },
@@ -37,6 +42,44 @@ export const availableRoles = [
 ];
 
 export const permissions: RolePermissions = {
+  SUPER_ADMIN: [
+    {
+      resource: 'dashboard',
+      actions: '*',
+    },
+    {
+      resource: 'team',
+      actions: '*',
+    },
+    {
+      resource: 'team_member',
+      actions: '*',
+    },
+    {
+      resource: 'team_invitation',
+      actions: '*',
+    },
+    {
+      resource: 'team_sso',
+      actions: '*',
+    },
+    {
+      resource: 'team_dsync',
+      actions: '*',
+    },
+    {
+      resource: 'team_audit_log',
+      actions: '*',
+    },
+    {
+      resource: 'team_webhook',
+      actions: '*',
+    },
+    {
+      resource: 'team_api_key',
+      actions: '*',
+    },
+  ],
   OWNER: [
     {
       resource: 'team',

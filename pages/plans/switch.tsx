@@ -3,7 +3,6 @@ import { SUPPORTED_LANGUAGES } from '@/lib/language';
 import { getSession } from '@/lib/session';
 import { deleteCookie } from 'cookies-next';
 import { getTeams } from 'models/team';
-import { getUserBySession } from 'models/user';
 import type {
   GetServerSidePropsContext,
   InferGetServerSidePropsType,
@@ -18,8 +17,7 @@ import type { NextPageWithLayout } from 'types';
 
 const Organizations: NextPageWithLayout<
   InferGetServerSidePropsType<typeof getServerSideProps>
-> = ({ teams, ...props }) => {
-  console.log('props', props)
+> = ({ teams }) => {
   const router = useRouter();
   const { t } = useTranslation('common');
   const { status } = useSession();
@@ -57,7 +55,6 @@ export const getServerSideProps = async (
   const { req, res, locale }: GetServerSidePropsContext = context;
 
   const session = await getSession(req, res);
-  const user = await getUserBySession(session);
 
   deleteCookie('pending-invite', { req, res });
 
@@ -67,7 +64,6 @@ export const getServerSideProps = async (
     props: {
       ...(locale ? await serverSideTranslations(locale, ['common'], null, SUPPORTED_LANGUAGES) : {}),
       teams: JSON.parse(JSON.stringify(teams)),
-      user: JSON.parse(JSON.stringify(user)),
     },
   };
 };

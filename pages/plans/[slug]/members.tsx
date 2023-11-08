@@ -3,14 +3,12 @@ import { Error, Loading } from '@/components/shared';
 import { Members, TeamTab } from '@/components/team';
 import env from '@/lib/env';
 import { SUPPORTED_LANGUAGES } from '@/lib/language';
-import { getSession } from '@/lib/session';
 import useTeam from 'hooks/useTeam';
-import { getUserBySession } from 'models/user';
 import { GetServerSidePropsContext } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-const TeamMembers = ({ teamFeatures, user }) => {
+const TeamMembers = ({ teamFeatures }) => {
   const { t } = useTranslation('common');
   const { isLoading, isError, team } = useTeam();
 
@@ -30,7 +28,7 @@ const TeamMembers = ({ teamFeatures, user }) => {
     <>
       <TeamTab activeTab="members" team={team} teamFeatures={teamFeatures} />
       <div className="space-y-6">
-        <Members team={team} user={user} />
+        <Members team={team} />
         <PendingInvitations team={team} />
       </div>
     </>
@@ -39,17 +37,11 @@ const TeamMembers = ({ teamFeatures, user }) => {
 
 export async function getServerSideProps({
   locale,
-  req,
-  res
 }: GetServerSidePropsContext) {
-  const session = await getSession(req, res);
-  const user = await getUserBySession(session);
-
   return {
     props: {
       ...(locale ? await serverSideTranslations(locale, ['common'], null, SUPPORTED_LANGUAGES) : {}),
       teamFeatures: env.teamFeatures,
-      user: JSON.parse(JSON.stringify(user)),
     },
   };
 }

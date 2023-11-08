@@ -9,6 +9,7 @@ declare module 'next-auth' {
   interface Session {
     user: DefaultSession['user'] & {
       id: string;
+      isAdmin?: boolean;
       roles: { teamId: string; role: Role }[];
     };
   }

@@ -24,6 +24,8 @@
   "save-changes": "Save Changes",
   "successfully-updated": "Changes saved successfully.",
   "all-teams": "All Teams",
+  "dashboard-private": "Private Dashboard",
+  "dashboard": "Dashboard",
   "team-invite": "is inviting you to join their team.",
   "successfully-joined": "You have successfully joined the team.",
   "invitation-sent": "Invitation sent!",

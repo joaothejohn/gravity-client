@@ -1,16 +1,14 @@
-import { PendingInvitations } from '@/components/invitation';
 import { Error, Loading } from '@/components/shared';
-import { Members, TeamTab } from '@/components/team';
+import { AccessControl } from '@/components/shared/AccessControl';
+import { RemoveTeam, TeamSettings, TeamTab } from '@/components/team';
 import env from '@/lib/env';
 import { SUPPORTED_LANGUAGES } from '@/lib/language';
-import { getSession } from '@/lib/session';
 import useTeam from 'hooks/useTeam';
-import { getUserBySession } from 'models/user';
-import { GetServerSidePropsContext } from 'next';
+import type { GetServerSidePropsContext } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-const TeamMembers = ({ teamFeatures, user }) => {
+const Settings = ({ teamFeatures }) => {
   const { t } = useTranslation('common');
   const { isLoading, isError, team } = useTeam();
 
@@ -28,10 +26,12 @@ const TeamMembers = ({ teamFeatures, user }) => {
 
   return (
     <>
-      <TeamTab activeTab="members" team={team} teamFeatures={teamFeatures} />
+      <TeamTab activeTab="settings" team={team} teamFeatures={teamFeatures} />
       <div className="space-y-6">
-        <Members team={team} user={user} />
-        <PendingInvitations team={team} />
+        <TeamSettings team={team} />
+        <AccessControl resource="team" actions={['delete']}>
+          <RemoveTeam team={team} />
+        </AccessControl>
       </div>
     </>
   );
@@ -39,19 +39,13 @@ const TeamMembers = ({ teamFeatures, user }) => {
 
 export async function getServerSideProps({
   locale,
-  req,
-  res
 }: GetServerSidePropsContext) {
-  const session = await getSession(req, res);
-  const user = await getUserBySession(session);
-
   return {
     props: {
       ...(locale ? await serverSideTranslations(locale, ['common'], null, SUPPORTED_LANGUAGES) : {}),
       teamFeatures: env.teamFeatures,
-      user: JSON.parse(JSON.stringify(user)),
     },
   };
 }
 
-export default TeamMembers;
+export default Settings;

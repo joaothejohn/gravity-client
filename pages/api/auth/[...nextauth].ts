@@ -66,6 +66,7 @@ if (isAuthProviderEnabled('credentials')) {
           id: user.id,
           name: user.name,
           email: user.email,
+          isAdmin: user.isAdmin,
         };
       },
     })

@@ -1,4 +1,4 @@
-import DashboardMain from '@/components/dashboard/Dashboard';
+import DashboardMain from '@/components/dashboardPrivate/DashboardPrivate';
 import { SUPPORTED_LANGUAGES } from '@/lib/language';
 import { getSession } from '@/lib/session';
 import { getUserBySession } from 'models/user';

@@ -12,6 +12,8 @@ import useTheme from 'hooks/useTheme';
 import env from '@/lib/env';
 import Head from 'next/head';
 import { SUPPORTED_LANGUAGES } from '@/lib/language';
+import { getSession } from '@/lib/session';
+import { getUserBySession } from 'models/user';
 
 const Home: NextPageWithLayout = () => {
   const { toggleTheme, selectedTheme } = useTheme();
@@ -77,7 +79,6 @@ const Home: NextPageWithLayout = () => {
 export const getServerSideProps = async (
   context: GetServerSidePropsContext
 ) => {
-  // Redirect to login page if landing page is disabled
   if (env.hideLandingPage) {
     return {
       redirect: {
@@ -87,11 +88,21 @@ export const getServerSideProps = async (
     };
   }
 
+  const session = await getSession(context.req, context.res);
+  const user = await getUserBySession(session);
   const { locale } = context;
+
+  if (!user) {
+    return {
+      notFound: true,
+    };
+  }
+
 
   return {
     props: {
       ...(locale ? await serverSideTranslations(locale, ['common'], null, SUPPORTED_LANGUAGES) : {}),
+      user: JSON.parse(JSON.stringify(user)),
     },
   };
 };

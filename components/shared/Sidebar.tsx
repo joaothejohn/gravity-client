@@ -4,6 +4,8 @@ import {
   LockClosedIcon,
   RectangleStackIcon,
   UserCircleIcon,
+  HomeIcon,
+  KeyIcon
 } from '@heroicons/react/24/outline';
 import { forwardRef, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
@@ -11,13 +13,14 @@ import { useTranslation } from 'next-i18next';
 
 import TeamDropdown from './TeamDropdown';
 import SidebarItem, { type SidebarMenuItem } from './SidebarItem';
+import { User } from '@prisma/client';
 
 interface SidebarMenus {
   [key: string]: SidebarMenuItem[];
 }
 
-export default forwardRef<HTMLElement, { isCollapsed: boolean }>(
-  function Sidebar({ isCollapsed }, ref) {
+export default forwardRef<HTMLElement, { isCollapsed: boolean, user?: User }>(
+  function Sidebar({ isCollapsed, user }, ref) {
     const { asPath, isReady, query } = useRouter();
     const { t } = useTranslation('common');
     const [activePathname, setActivePathname] = useState<null | string>(null);
@@ -33,6 +36,18 @@ export default forwardRef<HTMLElement, { isCollapsed: boolean }>(
 
     const sidebarMenus: SidebarMenus = {
       personal: [
+        {
+          name: t('dashboard-private'),
+          href: '/dashboard-private',
+          icon: KeyIcon,
+          active: activePathname === '/dashboard-private',
+        },
+        {
+          name: t('dashboard'),
+          href: '/dashboard',
+          icon: HomeIcon,
+          active: activePathname === '/dashboard',
+        },
         {
           name: t('all-teams'),
           href: '/teams',
@@ -70,12 +85,12 @@ export default forwardRef<HTMLElement, { isCollapsed: boolean }>(
       ],
     };
 
-    const menus = sidebarMenus[slug ? 'team' : 'personal'];
+    const menus = sidebarMenus[slug ? 'team' : 'personal'].filter(x => !(x.name === t('dashboard-private') && !user?.isAdmin));
 
     return (
       <>
         <aside
-          className={`fixed ${!isCollapsed && 'z-10'} h-screen w-6/12 lg:w-64`}
+          className={`fixed ${!isCollapsed && 'z-10'} h-screen w-6/12 lg:w-64 md:w-48 sm:w-40`}
           ref={ref}
           aria-label="Sidebar"
         >
