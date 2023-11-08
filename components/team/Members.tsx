@@ -14,7 +14,7 @@ import type { ApiResponse } from 'types';
 import ConfirmationDialog from '../shared/ConfirmationDialog';
 import { useState } from 'react';
 
-const Members = ({ team, user }: { team: Team, user: User }) => {
+const Members = ({ team, user }: { team: Team, user?: User | null }) => {
   const { data: session } = useSession();
   const { t } = useTranslation('common');
   const { canAccess } = useCanAccess();

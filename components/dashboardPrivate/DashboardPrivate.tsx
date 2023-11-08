@@ -26,7 +26,7 @@ const DashboardMain = () => {
     <div className="py-6">
       <p className="text-4xl ml-2 font-black text-gray-900 dark:text-white">Domain ID: {domainId}</p>
       <div className="flex justify-start">
-        {providerInfo?.map((user) => <RadiusUserCard user={user} />)}
+        {providerInfo?.map((user) => <RadiusUserCard key={user.userId} user={user} />)}
       </div>
     </div>
   );
