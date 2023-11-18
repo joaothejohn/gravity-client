@@ -20,7 +20,7 @@ const PlanSettings = ({ team }: { team: Team }) => {
     initialValues: {
       name: team.name,
       slug: team.slug,
-      domain: team.domain,
+      domain: team.domainId,
     },
     validationSchema: Yup.object().shape({
       name: Yup.string().required('Name is required'),

@@ -7,7 +7,7 @@ import type { Session } from 'next-auth';
 export const createUser = async (param: {
   name: string;
   email: string;
-  domainId: string;
+  domainId?: string;
   password?: string;
   isAdmin?: boolean;
 }) => {
