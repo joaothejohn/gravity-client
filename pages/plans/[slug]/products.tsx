@@ -2,6 +2,7 @@ import { SUPPORTED_LANGUAGES } from '@/lib/language';
 import { GetServerSidePropsContext } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import type { NextPageWithLayout } from 'types';
+import cookie from 'cookie';
 
 const Products: NextPageWithLayout = () => {
   return (
@@ -14,11 +15,14 @@ const Products: NextPageWithLayout = () => {
 };
 
 export async function getServerSideProps({
-  locale,
+  req, locale
 }: GetServerSidePropsContext) {
+  const cookies = cookie.parse(req?.headers?.cookie || '');
+  const currentLanguage = cookies['current-language'] || locale;
+
   return {
     props: {
-      ...(locale ? await serverSideTranslations(locale, ['common'], null, SUPPORTED_LANGUAGES) : {}),
+      ...(currentLanguage ? await serverSideTranslations(currentLanguage, ['common'], null, SUPPORTED_LANGUAGES) : {}),
     },
   };
 }

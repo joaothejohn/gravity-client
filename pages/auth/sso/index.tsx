@@ -14,6 +14,7 @@ import { Button } from 'react-daisyui';
 import { toast } from 'react-hot-toast';
 import type { NextPageWithLayout } from 'types';
 import * as Yup from 'yup';
+import cookie from 'cookie';
 
 const SSO: NextPageWithLayout = () => {
   const { t } = useTranslation('common');
@@ -107,10 +108,13 @@ SSO.getLayout = function getLayout(page: ReactElement) {
   );
 };
 
-export async function getStaticProps({ locale }: GetServerSidePropsContext) {
+export async function getStaticProps({ req, locale }: GetServerSidePropsContext) {
+  const cookies = cookie.parse(req?.headers?.cookie || '');
+  const currentLanguage = cookies['current-language'] || locale;
+
   return {
     props: {
-      ...(locale ? await serverSideTranslations(locale, ['common'], null, SUPPORTED_LANGUAGES) : {}),
+      ...(currentLanguage ? await serverSideTranslations(currentLanguage, ['common'], null, SUPPORTED_LANGUAGES) : {}),
     },
   };
 }

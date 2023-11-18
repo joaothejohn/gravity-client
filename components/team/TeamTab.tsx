@@ -2,8 +2,6 @@ import {
   Cog6ToothIcon,
   DocumentMagnifyingGlassIcon,
   KeyIcon,
-  PaperAirplaneIcon,
-  ShieldExclamationIcon,
   UserPlusIcon,
 } from '@heroicons/react/24/outline';
 import type { Team } from '@prisma/client';
@@ -41,30 +39,6 @@ const TeamTab = ({ activeTab, team, heading, teamFeatures }: TeamTabProps) => {
   }
 
   if (
-    teamFeatures.sso &&
-    canAccess('team_sso', ['create', 'update', 'read', 'delete'])
-  ) {
-    navigations.push({
-      name: 'Single Sign-On',
-      href: `/teams/${team.slug}/saml`,
-      active: activeTab === 'saml',
-      icon: ShieldExclamationIcon,
-    });
-  }
-
-  if (
-    teamFeatures.dsync &&
-    canAccess('team_dsync', ['create', 'update', 'read', 'delete'])
-  ) {
-    navigations.push({
-      name: 'Directory Sync',
-      href: `/teams/${team.slug}/directory-sync`,
-      active: activeTab === 'directory-sync',
-      icon: UserPlusIcon,
-    });
-  }
-
-  if (
     teamFeatures.auditLog &&
     canAccess('team_audit_log', ['create', 'update', 'read', 'delete'])
   ) {
@@ -73,18 +47,6 @@ const TeamTab = ({ activeTab, team, heading, teamFeatures }: TeamTabProps) => {
       href: `/teams/${team.slug}/audit-logs`,
       active: activeTab === 'audit-logs',
       icon: DocumentMagnifyingGlassIcon,
-    });
-  }
-
-  if (
-    teamFeatures.webhook &&
-    canAccess('team_webhook', ['create', 'update', 'read', 'delete'])
-  ) {
-    navigations.push({
-      name: 'Webhooks',
-      href: `/teams/${team.slug}/webhooks`,
-      active: activeTab === 'webhooks',
-      icon: PaperAirplaneIcon,
     });
   }
 

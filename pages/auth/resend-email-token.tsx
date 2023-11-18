@@ -14,6 +14,7 @@ import { useTranslation } from 'next-i18next';
 import { ApiResponse, NextPageWithLayout } from 'types';
 import * as Yup from 'yup';
 import { SUPPORTED_LANGUAGES } from '@/lib/language';
+import cookie from 'cookie';
 
 const VerifyAccount: NextPageWithLayout<
   InferGetServerSidePropsType<typeof getServerSideProps>
@@ -109,11 +110,13 @@ VerifyAccount.getLayout = function getLayout(page: ReactElement) {
 export const getServerSideProps = async (
   context: GetServerSidePropsContext
 ) => {
-  const { locale }: GetServerSidePropsContext = context;
+  const { req, locale }: GetServerSidePropsContext = context;
+  const cookies = cookie.parse(req?.headers?.cookie || '');
+  const currentLanguage = cookies['current-language'] || locale;
 
   return {
     props: {
-      ...(locale ? await serverSideTranslations(locale, ['common'], null, SUPPORTED_LANGUAGES) : {}),
+      ...(currentLanguage ? await serverSideTranslations(currentLanguage, ['common'], null, SUPPORTED_LANGUAGES) : {}),
     },
   };
 };

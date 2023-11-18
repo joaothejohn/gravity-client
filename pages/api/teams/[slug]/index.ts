@@ -10,6 +10,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { recordMetric } from '@/lib/metrics';
 import { validateDomain } from '@/lib/common';
 import { ApiError } from '@/lib/errors';
+import { deleteDomain } from 'models/domain';
 
 export default async function handler(
   req: NextApiRequest,
@@ -68,7 +69,6 @@ const handlePUT = async (req: NextApiRequest, res: NextApiResponse) => {
   const updatedTeam = await updateTeam(teamMember.team.slug, {
     name,
     slug,
-    domain,
   });
 
   sendAudit({
@@ -96,8 +96,19 @@ const handleDELETE = async (req: NextApiRequest, res: NextApiResponse) => {
     user: teamMember.user,
     team: teamMember.team,
   });
-
+  
   recordMetric('team.removed');
+
+  await deleteDomain({ id: teamMember.team.domainId });
+
+  sendAudit({
+    action: 'domain.delete',
+    crud: 'd',
+    user: teamMember.user,
+    team: teamMember.team,
+  });
+  
+  recordMetric('domain.removed');
 
   res.status(200).json({ data: {} });
 };

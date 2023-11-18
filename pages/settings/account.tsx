@@ -7,6 +7,7 @@ import { getUserBySession } from 'models/user';
 import { inferSSRProps } from '@/lib/inferSSRProps';
 import { UpdateAccount } from '@/components/account';
 import { SUPPORTED_LANGUAGES } from '@/lib/language';
+import cookie from 'cookie';
 
 type AccountProps = NextPageWithLayout<
   inferSSRProps<typeof getServerSideProps>
@@ -21,7 +22,7 @@ export const getServerSideProps = async (
 ) => {
   const session = await getSession(context.req, context.res);
   const user = await getUserBySession(session);
-  const { locale } = context;
+  const { req, locale } = context;
 
   if (!user) {
     return {
@@ -29,9 +30,12 @@ export const getServerSideProps = async (
     };
   }
 
+  const cookies = cookie.parse(req?.headers?.cookie || '');
+  const currentLanguage = cookies['current-language'] || locale;
+
   return {
     props: {
-      ...(locale ? await serverSideTranslations(locale, ['common'], null, SUPPORTED_LANGUAGES) : {}),
+      ...(currentLanguage ? await serverSideTranslations(currentLanguage, ['common'], null, SUPPORTED_LANGUAGES) : {}),
       user: JSON.parse(JSON.stringify(user)),
     },
   };

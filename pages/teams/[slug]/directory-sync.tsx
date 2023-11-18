@@ -16,6 +16,7 @@ import { toast } from 'react-hot-toast';
 import type { ApiResponse } from 'types';
 import env from '@/lib/env';
 import { SUPPORTED_LANGUAGES } from '@/lib/language';
+import cookie from 'cookie';
 
 const DirectorySync = ({ teamFeatures }) => {
   const router = useRouter();
@@ -115,7 +116,7 @@ const DirectorySync = ({ teamFeatures }) => {
 };
 
 export async function getServerSideProps({
-  locale,
+  req, locale
 }: GetServerSidePropsContext) {
   if (!env.teamFeatures.dsync) {
     return {
@@ -123,9 +124,12 @@ export async function getServerSideProps({
     };
   }
 
+  const cookies = cookie.parse(req?.headers?.cookie || '');
+  const currentLanguage = cookies['current-language'] || locale;
+
   return {
     props: {
-      ...(locale ? await serverSideTranslations(locale, ['common'], null, SUPPORTED_LANGUAGES) : {}),
+      ...(currentLanguage ? await serverSideTranslations(currentLanguage, ['common'], null, SUPPORTED_LANGUAGES) : {}),
       teamFeatures: env.teamFeatures,
     },
   };

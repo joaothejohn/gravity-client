@@ -3,13 +3,14 @@ import { GetServerSidePropsContext } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import env from '@/lib/env';
 import { SUPPORTED_LANGUAGES } from '@/lib/language';
+import cookie from 'cookie';
 
 const APIKeys = ({ teamFeatures }) => {
   return <APIKeysContainer teamFeatures={teamFeatures} />;
 };
 
 export async function getServerSideProps({
-  locale,
+  req, locale
 }: GetServerSidePropsContext) {
   if (!env.teamFeatures.apiKey) {
     return {
@@ -17,9 +18,12 @@ export async function getServerSideProps({
     };
   }
 
+  const cookies = cookie.parse(req?.headers?.cookie || '');
+  const currentLanguage = cookies['current-language'] || locale;
+
   return {
     props: {
-      ...(locale ? await serverSideTranslations(locale, ['common'], null, SUPPORTED_LANGUAGES) : {}),
+      ...(currentLanguage ? await serverSideTranslations(currentLanguage, ['common'], null, SUPPORTED_LANGUAGES) : {}),
       teamFeatures: env.teamFeatures,
     },
   };

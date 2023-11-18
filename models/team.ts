@@ -6,15 +6,17 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 export const createTeam = async (param: {
   userId: string;
+  domainId: string;
   name: string;
   slug: string;
 }) => {
-  const { userId, name, slug } = param;
+  const { userId, name, slug, domainId } = param;
 
   const team = await prisma.team.create({
     data: {
       name,
       slug,
+      domainId,
     },
   });
 

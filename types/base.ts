@@ -59,7 +59,8 @@ export type AppEvent =
   | 'webhook.created'
   | 'webhook.removed'
   | 'webhook.fetched'
-  | 'webhook.updated';
+  | 'webhook.updated'
+  | 'domain.removed';
 
 export type AUTH_PROVIDER =
   | 'github'
@@ -93,14 +94,26 @@ export interface IPlanUser {
   burstTime: string
 }
 
+interface IPlan {
+  id: string
+  name: string
+  maxLimit: string
+  limitAt: string
+  priority: string
+  burstLimit: string
+  burstThreshold: string
+  burstTime: string
+}
+
 export interface IRadiusUserResponse {
   userId: string
-  domainId: string
+  isActive: boolean
   domain?: string | null
-  userPlan?: string | null
-  userName: string
+  domainId?: string | null
+  username: string
   password: null
   ip: string
+  plan: IPlan
   planId: string
 }
 

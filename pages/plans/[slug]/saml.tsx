@@ -10,6 +10,7 @@ import styles from 'styles/sdk-override.module.css';
 import env from '@/lib/env';
 import { useRouter } from 'next/router';
 import { SUPPORTED_LANGUAGES } from '@/lib/language';
+import cookie from 'cookie';
 
 const CREATE_SSO_CSS = {
   input: `${styles['sdk-input']} input input-bordered`,
@@ -134,7 +135,7 @@ const TeamSSO = ({ teamFeatures }) => {
 };
 
 export async function getServerSideProps({
-  locale,
+  req, locale
 }: GetServerSidePropsContext) {
   if (!env.teamFeatures.sso) {
     return {
@@ -142,9 +143,12 @@ export async function getServerSideProps({
     };
   }
 
+  const cookies = cookie.parse(req?.headers?.cookie || '');
+  const currentLanguage = cookies['current-language'] || locale;
+
   return {
     props: {
-      ...(locale ? await serverSideTranslations(locale, ['common'], null, SUPPORTED_LANGUAGES) : {}),
+      ...(currentLanguage ? await serverSideTranslations(currentLanguage, ['common'], null, SUPPORTED_LANGUAGES) : {}),
       teamFeatures: env.teamFeatures,
     },
   };

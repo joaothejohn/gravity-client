@@ -10,6 +10,7 @@ import { createUser, getUser } from 'models/user';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { recordMetric } from '@/lib/metrics';
 import { validateRecaptcha } from '@/lib/recaptcha';
+import { createDomain } from 'models/domain';
 
 export default async function handler(
   req: NextApiRequest,
@@ -68,9 +69,14 @@ const handlePOST = async (req: NextApiRequest, res: NextApiResponse) => {
     }
   }
 
+  const domain = await createDomain({
+    name: team
+  });
+
   const user = await createUser({
     name,
     email,
+    domainId: domain.id,
     password: await hashPassword(password),
   });
 
@@ -79,6 +85,7 @@ const handlePOST = async (req: NextApiRequest, res: NextApiResponse) => {
 
     await createTeam({
       userId: user.id,
+      domainId: domain.id,
       name: team,
       slug,
     });

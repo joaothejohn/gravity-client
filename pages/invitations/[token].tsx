@@ -1,3 +1,4 @@
+import { signOut } from 'next-auth/react';
 import { AuthLayout } from '@/components/layouts';
 import { Error, Loading } from '@/components/shared';
 import { defaultHeaders } from '@/lib/common';
@@ -10,19 +11,27 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import type { ReactElement } from 'react';
+import { useEffect, type ReactElement } from 'react';
 import { Button } from 'react-daisyui';
 import toast from 'react-hot-toast';
 import type { ApiResponse, NextPageWithLayout } from 'types';
+import cookie from 'cookie';
 
 const AcceptTeamInvitation: NextPageWithLayout = () => {
-  const { status } = useSession();
+  const { status, data } = useSession();
   const router = useRouter();
   const { t } = useTranslation('common');
-
   const { token } = router.query;
-
   const { isLoading, isError, invitation } = useInvitation(token as string);
+  
+  const isAuthenticated = status === 'authenticated';
+  const isDifferentUser = invitation?.email !== data?.user.email;
+
+  useEffect(() => {
+    if (isAuthenticated && isDifferentUser) {
+      signOut()
+    }
+  }, [status])
 
   if (isLoading) {
     return <Loading />;
@@ -71,7 +80,16 @@ const AcceptTeamInvitation: NextPageWithLayout = () => {
               ? t('accept-invite')
               : t('invite-create-account')}
           </h3>
-          {status === 'unauthenticated' ? (
+          {isAuthenticated ? (
+            <Button
+              onClick={acceptInvitation}
+              fullWidth
+              color="primary"
+              size="md"
+            >
+              {t('accept-invitation')}
+            </Button>
+          ) : (
             <>
               <Button
                 variant="outline"
@@ -94,15 +112,6 @@ const AcceptTeamInvitation: NextPageWithLayout = () => {
                 {t('login')}
               </Button>
             </>
-          ) : (
-            <Button
-              onClick={acceptInvitation}
-              fullWidth
-              color="primary"
-              size="md"
-            >
-              {t('accept-invitation')}
-            </Button>
           )}
         </div>
       </div>
@@ -127,6 +136,9 @@ export const getServerSideProps = async (
   const { req, res, query, locale }: GetServerSidePropsContext = context;
   const { token } = query;
 
+  const cookies = cookie.parse(req?.headers?.cookie || '');
+  const currentLanguage = cookies['current-language'] || locale;
+
   setCookie(
     'pending-invite',
     {
@@ -144,7 +156,7 @@ export const getServerSideProps = async (
 
   return {
     props: {
-      ...(locale ? await serverSideTranslations(locale, ['common'], null, SUPPORTED_LANGUAGES) : {}),
+      ...(currentLanguage ? await serverSideTranslations(currentLanguage, ['common'], null, SUPPORTED_LANGUAGES) : {}),
     },
   };
 };

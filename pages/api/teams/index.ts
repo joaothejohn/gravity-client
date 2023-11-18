@@ -4,6 +4,7 @@ import { getSession } from '@/lib/session';
 import { createTeam, getTeams, isTeamExists } from 'models/team';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { recordMetric } from '@/lib/metrics';
+import { createDomain } from 'models/domain';
 
 export default async function handler(
   req: NextApiRequest,
@@ -55,8 +56,13 @@ const handlePOST = async (req: NextApiRequest, res: NextApiResponse) => {
     throw new ApiError(400, 'A team with the name already exists.');
   }
 
+  const domain = await createDomain({
+    name
+  })
+
   const team = await createTeam({
     userId: session?.user?.id as string,
+    domainId: domain.id,
     name,
     slug,
   });

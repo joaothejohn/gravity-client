@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from 'next-i18next';
+import cookie from 'cookie';
+
 import { setCookie, getCookie } from 'cookies-next';
 import {
   ChevronUpDownIcon,
@@ -9,37 +11,39 @@ import { flags } from "@/lib/language";
 
 const LanguageSelector = () => {
   const router = useRouter();
-  const [currentLanguage, setCurrentLanguage] = useState<string>('es');
   const { i18n } = useTranslation() as any;
+
+  const getInitialLanguage = () => {
+    const cookieLanguage = getCookie('current-language');
+    if (cookieLanguage !== 'es') return 'es'
+    return cookieLanguage;
+  }
+
+  const [currentLanguage, setCurrentLanguage] = useState<string>(getInitialLanguage);
+  
+  useEffect(() => {
+    const cookies = cookie.parse(document.cookie);
+    const currentLanguage = cookies['current-language'];
+    setCurrentLanguage(currentLanguage)
+  }, []);
 
   const handleSetCurrentLanguage = (id: string) => {
     setCurrentLanguage(id);
     setCookie('current-language', id);
+
+    if (i18n.isInitialized) {
+      i18n.changeLanguage(id);
+    }
   }
-
-  const handleLanguageCookie = () => {
-    const language = getCookie('current-language');
-    if (!language) return
-
-    setCurrentLanguage(language);
-    setCookie('current-language', language);
-    i18n.changeLanguage(language);
-  }
-
-  useEffect(() => {
-    handleLanguageCookie();
-  }, [currentLanguage])
-
-  useEffect(() => {
-    handleLanguageCookie();
-  }, [])
 
   useEffect(() => {
     if (router.pathname === '/_error') return
     if (router.locale !== currentLanguage) {
-      handleSetCurrentLanguage(currentLanguage);
+      handleSetCurrentLanguage(currentLanguage as string);
     }
-  }, [router.locale])
+  }, [router.locale]);
+
+
 
   return (
     <div className="px-4 py-2">
@@ -62,7 +66,7 @@ const LanguageSelector = () => {
                   {icon && (
                     <li
                       onClick={() => handleSetCurrentLanguage(id)}
-                      className="text-xs text-gray-500 py-1 px-2"
+                      className="text-xs text-gray-500 py-1 px-2 hover:cursor-pointer"
                       key={icon}
                     >
                       {icon} {"  "} {currentLanguage === id ? <strong>{id}</strong> : id}

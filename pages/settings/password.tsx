@@ -1,8 +1,9 @@
-import type { GetServerSidePropsContext } from 'next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-
 import { UpdatePassword } from '@/components/account';
 import { SUPPORTED_LANGUAGES } from '@/lib/language';
+
+import type { GetServerSidePropsContext } from 'next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import cookie from 'cookie';
 
 const Password = () => {
   return <UpdatePassword />;
@@ -11,11 +12,13 @@ const Password = () => {
 export const getServerSideProps = async (
   context: GetServerSidePropsContext
 ) => {
-  const { locale }: GetServerSidePropsContext = context;
+  const { req, locale }: GetServerSidePropsContext = context;
+  const cookies = cookie.parse(req?.headers?.cookie || '');
+  const currentLanguage = cookies['current-language'] || locale;
 
   return {
     props: {
-      ...(locale ? await serverSideTranslations(locale, ['common'], null, SUPPORTED_LANGUAGES) : {}),
+      ...(currentLanguage ? await serverSideTranslations(currentLanguage, ['common'], null, SUPPORTED_LANGUAGES) : {}),
     },
   };
 };

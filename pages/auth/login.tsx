@@ -28,6 +28,8 @@ import AgreeMessage from '@/components/auth/AgreeMessage';
 import GoogleReCAPTCHA from '@/components/shared/GoogleReCAPTCHA';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { SUPPORTED_LANGUAGES } from '@/lib/language';
+import useInvitation from 'hooks/useInvitation';
+import cookie from 'cookie';
 
 interface Message {
   text: string | null;
@@ -38,18 +40,20 @@ const Login: NextPageWithLayout<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = ({ csrfToken, authProviders, recaptchaSiteKey }) => {
   const router = useRouter();
-  const { status } = useSession();
-  const { t } = useTranslation('common');
-  const [recaptchaToken, setRecaptchaToken] = useState<string>('');
-  const [message, setMessage] = useState<Message>({ text: null, status: null });
-  const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
-  const recaptchaRef = useRef<ReCAPTCHA>(null);
-
   const { error, success, token } = router.query as {
     error: string;
     success: string;
     token: string;
   };
+  const { t } = useTranslation('common');
+  const { status } = useSession();
+  const { invitation } = useInvitation(token as string);
+  const [recaptchaToken, setRecaptchaToken] = useState<string>('');
+  const [message, setMessage] = useState<Message>({ text: null, status: null });
+  const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
+
+
 
   const handlePasswordVisibility = () => {
     setIsPasswordVisible((prev) => !prev);
@@ -81,6 +85,11 @@ const Login: NextPageWithLayout<
     onSubmit: async (values) => {
       const { email, password } = values;
 
+      if (token && email !== invitation?.email) {
+        toast.error(t('credentials-not-allowed'));
+        return;
+      }
+
       const response = await signIn('credentials', {
         email,
         password,
@@ -93,7 +102,15 @@ const Login: NextPageWithLayout<
       formik.resetForm();
       recaptchaRef.current?.reset();
 
-      if (!response?.ok) {
+      const isResponseOk = response?.ok;
+      const isInvitationEmail = token && email === invitation?.email;
+
+      if (!isResponseOk && isInvitationEmail) {
+        router.push(`/auth/join?token=${token}`);
+        return;
+      }
+
+      if (!isResponseOk) {
         toast.error(t(response?.error));
         return;
       }
@@ -117,14 +134,6 @@ const Login: NextPageWithLayout<
         <Alert status={message.status}>{t(message.text)}</Alert>
       )}
       <div className="rounded p-6 border">
-        <div className="flex gap-2 flex-wrap">
-          {authProviders.github && <GithubButton />}
-          {authProviders.google && <GoogleButton />}
-        </div>
-
-        {(authProviders.github || authProviders.google) &&
-          authProviders.credentials && <div className="divider">or</div>}
-
         {authProviders.credentials && (
           <form onSubmit={formik.handleSubmit}>
             <div className="space-y-3">
@@ -190,7 +199,7 @@ const Login: NextPageWithLayout<
           </form>
         )}
 
-        {(authProviders.email || authProviders.saml) && (
+        {(authProviders.email) && (
           <div className="divider"></div>
         )}
 
@@ -198,12 +207,6 @@ const Login: NextPageWithLayout<
           {authProviders.email && (
             <Link href="/auth/magic-link" className="btn-outline btn w-full">
               &nbsp;{t('sign-in-with-email')}
-            </Link>
-          )}
-
-          {authProviders.saml && (
-            <Link href="/auth/sso" className="btn-outline btn w-full">
-              &nbsp;{t('continue-with-saml-sso')}
             </Link>
           )}
         </div>
@@ -232,11 +235,13 @@ Login.getLayout = function getLayout(page: ReactElement) {
 export const getServerSideProps = async (
   context: GetServerSidePropsContext
 ) => {
-  const { locale }: GetServerSidePropsContext = context;
+  const { req, locale }: GetServerSidePropsContext = context;
+  const cookies = cookie.parse(req?.headers?.cookie || '');
+  const currentLanguage = cookies['current-language'] || locale;
 
   return {
     props: {
-      ...(locale ? await serverSideTranslations(locale, ['common'], null, SUPPORTED_LANGUAGES) : {}),
+      ...(currentLanguage ? await serverSideTranslations(currentLanguage, ['common'], null, SUPPORTED_LANGUAGES) : {}),
       csrfToken: await getCsrfToken(context),
       authProviders: authProviderEnabled(),
       recaptchaSiteKey: env.recaptcha.siteKey,

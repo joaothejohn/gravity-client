@@ -14,6 +14,7 @@ import Head from 'next/head';
 import { SUPPORTED_LANGUAGES } from '@/lib/language';
 import { getSession } from '@/lib/session';
 import { getUserBySession } from 'models/user';
+import cookie from 'cookie';
 
 const Home: NextPageWithLayout = () => {
   const { toggleTheme, selectedTheme } = useTheme();
@@ -88,9 +89,9 @@ export const getServerSideProps = async (
     };
   }
 
-  const session = await getSession(context.req, context.res);
+  const { req, res, locale } = context;
+  const session = await getSession(req, res);
   const user = await getUserBySession(session);
-  const { locale } = context;
 
   if (!user) {
     return {
@@ -98,10 +99,12 @@ export const getServerSideProps = async (
     };
   }
 
+  const cookies = cookie.parse(req?.headers?.cookie || '');
+  const currentLanguage = cookies['current-language'] || locale;
 
   return {
     props: {
-      ...(locale ? await serverSideTranslations(locale, ['common'], null, SUPPORTED_LANGUAGES) : {}),
+      ...(currentLanguage ? await serverSideTranslations(currentLanguage, ['common'], null, SUPPORTED_LANGUAGES) : {}),
       user: JSON.parse(JSON.stringify(user)),
     },
   };

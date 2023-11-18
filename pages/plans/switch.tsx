@@ -14,6 +14,7 @@ import { useRouter } from 'next/router';
 import { type ReactElement, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import type { NextPageWithLayout } from 'types';
+import cookie from 'cookie';
 
 const Organizations: NextPageWithLayout<
   InferGetServerSidePropsType<typeof getServerSideProps>
@@ -60,9 +61,12 @@ export const getServerSideProps = async (
 
   const teams = await getTeams(session?.user.id as string);
 
+  const cookies = cookie.parse(req?.headers?.cookie || '');
+  const currentLanguage = cookies['current-language'] || locale;
+
   return {
     props: {
-      ...(locale ? await serverSideTranslations(locale, ['common'], null, SUPPORTED_LANGUAGES) : {}),
+      ...(currentLanguage ? await serverSideTranslations(currentLanguage, ['common'], null, SUPPORTED_LANGUAGES) : {}),
       teams: JSON.parse(JSON.stringify(teams)),
     },
   };

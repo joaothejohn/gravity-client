@@ -5,7 +5,7 @@ import { IRadiusUserResponse } from "types";
 import RadiusUserCard from "./RadiusUserCard";
 
 const DashboardMain = () => {
-  const domainId = 'b519909d-d4b7-4b2a-a45c-b53505f1eff7';
+  const domainId = 'a9e8835d-340c-465a-ad41-e1993e7c6350';
   const [providerInfo, setProviderInfo] = useState<IRadiusUserResponse[]>([]);
 
   useEffect(() => {
@@ -24,8 +24,7 @@ const DashboardMain = () => {
 
   return (
     <div className="py-6">
-      <p className="text-4xl ml-2 font-black text-gray-900 dark:text-white">Domain ID: {domainId}</p>
-      <div className="flex justify-start">
+      <div className="flex flex-wrap">
         {providerInfo?.map((user) => <RadiusUserCard key={user.userId} user={user} />)}
       </div>
     </div>

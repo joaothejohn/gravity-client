@@ -4,6 +4,7 @@ import { Members, TeamTab } from '@/components/team';
 import env from '@/lib/env';
 import { SUPPORTED_LANGUAGES } from '@/lib/language';
 import useTeam from 'hooks/useTeam';
+import cookie from 'cookie';
 import { GetServerSidePropsContext } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -36,11 +37,14 @@ const TeamMembers = ({ teamFeatures }) => {
 };
 
 export async function getServerSideProps({
-  locale,
+  req, locale
 }: GetServerSidePropsContext) {
+  const cookies = cookie.parse(req?.headers?.cookie || '');
+  const currentLanguage = cookies['current-language'] || locale;
+
   return {
     props: {
-      ...(locale ? await serverSideTranslations(locale, ['common'], null, SUPPORTED_LANGUAGES) : {}),
+      ...(currentLanguage ? await serverSideTranslations(currentLanguage, ['common'], null, SUPPORTED_LANGUAGES) : {}),
       teamFeatures: env.teamFeatures,
     },
   };

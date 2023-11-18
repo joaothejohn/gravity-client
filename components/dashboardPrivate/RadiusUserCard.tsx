@@ -1,158 +1,129 @@
+import { ChartBarIcon, ExclamationTriangleIcon, GlobeAltIcon, PowerIcon, BoltIcon, EllipsisHorizontalCircleIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import React from "react";
 import app from "@/lib/app";
 import { IRadiusUserResponse } from "types";
+import { useTranslation } from "react-i18next";
+import { Button } from '@nextui-org/button'; 
 
 interface RadiusUserCardProps {
   user: IRadiusUserResponse;
 }
 
 const RadiusUserCard: React.FC<RadiusUserCardProps> = ({ user }) => {
+  const { t } = useTranslation('common');
+
+  const handleStatus = (isActive: boolean) => {
+    if (isActive) {
+      return (
+        <span className="absolute top-0 left-0 inline-flex mt-3 ml-3 px-3 py-2 rounded-lg z-10 bg-green-600 text-sm font-medium text-white select-none">
+          <PowerIcon className="w-5 h-5 mr-2" /> {t('plan-active')}
+        </span>
+      )
+    }
+
+    return (
+      <span className="absolute top-0 left-0 inline-flex mt-3 ml-3 px-3 py-2 rounded-lg z-10 bg-red-600 text-sm font-medium text-white select-none">
+        <ExclamationTriangleIcon className="w-5 h-5 mr-2" /> {t('plan-not-active')}
+      </span>
+    )
+  }
+
   return (
-    <>
-      <div className="p-4 m-4 relative w-full max-w-[26rem] rounded-xl bg-white bg-clip-border text-gray-700 shadow-lg">
-        <div className="relative mx-4 mt-4 overflow-hidden rounded-xl bg-blue-gray-500 bg-clip-border text-white shadow-lg shadow-blue-gray-500/40">
-          <Image
-            src={app.logoUrl}
-            className="mx-auto h-24 w-auto"
-            alt={app.name}
-            width={10}
-            height={10}
-          />
-          <div className="to-bg-black-10 absolute inset-0 h-full w-full bg-gradient-to-tr from-transparent via-transparent to-black/10"></div>
-          <button
-            className="!absolute top-4 right-4 h-8 max-h-[32px] w-8 max-w-[32px] select-none rounded-full text-center align-middle font-sans text-xs font-medium uppercase text-red-500 transition-all hover:bg-red-500/10 active:bg-red-500/30 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-            type="button"
-            data-ripple-dark="true"
-          >
-            <span className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 transform">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                aria-hidden="true"
-                className="h-6 w-6"
-              >
-                <circle cx="12" cy="12" r="10" fill="green" />
-              </svg>
-            </span>
-          </button>
-        </div>
-        <div className="p-6">
-          <div className="mb-3 flex items-center justify-between">
-            <h5 className="block font-sans text-xl font-medium leading-snug tracking-normal text-blue-gray-900 antialiased">
-              {user.userName}
-            </h5>
-          </div>
-          <p className="block font-sans text-base font-light leading-relaxed text-gray-700 antialiased">
-            IP: <span className="font-sans text-xl font-medium leading-snug tracking-normal text-blue-gray-900 antialiased" >{user.ip}</span>
-          </p>
-          <div className="group mt-8 inline-flex flex-wrap items-center gap-3">
-            <span
-              data-tooltip-target="money"
-              className="cursor-pointer rounded-full border border-gray-500/5 bg-gray-500/5 p-3 text-gray-500 transition-colors hover:border-gray-500/10 hover:bg-gray-500/10 hover:!opacity-100 group-hover:opacity-70"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                aria-hidden="true"
-                className="h-5 w-5"
-              >
-                <path d="M12 7.5a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5z"></path>
-                <path
-                  fill-rule="evenodd"
-                  d="M1.5 4.875C1.5 3.839 2.34 3 3.375 3h17.25c1.035 0 1.875.84 1.875 1.875v9.75c0 1.036-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 011.5 14.625v-9.75zM8.25 9.75a3.75 3.75 0 117.5 0 3.75 3.75 0 01-7.5 0zM18.75 9a.75.75 0 00-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 00.75-.75V9.75a.75.75 0 00-.75-.75h-.008zM4.5 9.75A.75.75 0 015.25 9h.008a.75.75 0 01.75.75v.008a.75.75 0 01-.75.75H5.25a.75.75 0 01-.75-.75V9.75z"
-                  clip-rule="evenodd"
-                ></path>
-                <path d="M2.25 18a.75.75 0 000 1.5c5.4 0 10.63.722 15.6 2.075 1.19.324 2.4-.558 2.4-1.82V18.75a.75.75 0 00-.75-.75H2.25z"></path>
-              </svg>
-            </span>
-            <span
-              data-tooltip-target="wifi"
-              className="cursor-pointer rounded-full border border-gray-500/5 bg-gray-500/5 p-3 text-gray-500 transition-colors hover:border-gray-500/10 hover:bg-gray-500/10 hover:!opacity-100 group-hover:opacity-70"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                aria-hidden="true"
-                className="h-5 w-5"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M1.371 8.143c5.858-5.857 15.356-5.857 21.213 0a.75.75 0 010 1.061l-.53.53a.75.75 0 01-1.06 0c-4.98-4.979-13.053-4.979-18.032 0a.75.75 0 01-1.06 0l-.53-.53a.75.75 0 010-1.06zm3.182 3.182c4.1-4.1 10.749-4.1 14.85 0a.75.75 0 010 1.061l-.53.53a.75.75 0 01-1.062 0 8.25 8.25 0 00-11.667 0 .75.75 0 01-1.06 0l-.53-.53a.75.75 0 010-1.06zm3.204 3.182a6 6 0 018.486 0 .75.75 0 010 1.061l-.53.53a.75.75 0 01-1.061 0 3.75 3.75 0 00-5.304 0 .75.75 0 01-1.06 0l-.53-.53a.75.75 0 010-1.06zm3.182 3.182a1.5 1.5 0 012.122 0 .75.75 0 010 1.061l-.53.53a.75.75 0 01-1.061 0l-.53-.53a.75.75 0 010-1.06z"
-                  clip-rule="evenodd"
-                ></path>
-              </svg>
-            </span>
+    <div className="w-2/4 p-4">
+      <div className="relative mx-auto w-full">
+        <a href="#" className="relative inline-block duration-300 ease-in-out transition-transform transform hover:-translate-y-2 w-full">
+          <div className="shadow p-4 rounded-lg bg-gray-50">
+            <div className="flex justify-center relative rounded-lg overflow-hidden h-30">
+              <div className="transition-transform duration-500 transform ease-in-out hover:scale-110 w-full">
+                <Image
+                  src="https://picsum.photos/790/65/?blur=10"
+                  alt={app.name}
+                  width={790}
+                  height={360}
+                />
+              </div>
+              <div className="absolute flex top-0 right-3 mb-3">
+                <p className="mt-2 text-sm text-gray-800 line-clamp-1 top-0 left-0 inline-flex mt-3 ml-3 px-3 py-2 rounded-lg z-10 bg-white text-sm font-medium text-gray-800 select-none">
+                  New York, NY 10004, US
+                </p>
+                <Button className="inline-flex mt-3 ml-3 px-3 py-2 rounded-lg bg-white font-small text-gray-800 overflow-hidden shadow">
+                    <span><EllipsisHorizontalCircleIcon className="w-6 h-6 mr-2" /></span>
+                    <span>Edit</span>
+                </Button>
+              </div>
+              {handleStatus(user.isActive)}
+            </div>
+            <div className="mt-4">
+              <div className="flex">
+                <BoltIcon className="w-6 h-6 mr-2" />
+                <p className="font-medium text-base md:text-lg text-gray-800 line-clamp-1">
+                  Current Plan:
+                </p>
+                <h2 className="ml-2 font-small text-base md:text-lg text-gray-800 line-clamp-1">
+                  {user.plan.name}
+                </h2>
+              </div>
+            </div>
+            <div className="flex mt-3">
+              <GlobeAltIcon className="w-6 h-6 mr-2" />
+              <p className="font-medium text-base md:text-lg text-gray-800 line-clamp-1">Current IP:</p>
+              <span className="mt-1 ml-2">
+                {user.ip}
+              </span>
+            </div>
+            <div className="grid grid-cols-2 grid-rows-2 gap-4 mt-8">
+              <p className="inline-flex flex-col xl:flex-row xl:items-center text-gray-800">
+                <ChartBarIcon className="w-5 h-5 mr-2" />
+                <span className="font-medium">Max Limit:</span>
+                <span className="mt-2 ml-2 xl:mt-0">
+                  {user.plan.maxLimit}
+                </span>
+              </p>
+              <p className="inline-flex flex-col xl:flex-row xl:items-center text-gray-800">
+                <ChartBarIcon className="w-5 h-5 mr-2" />
+                <span className="font-medium">Limit At:</span>
+                <span className="mt-2 ml-2 xl:mt-0">
+                  {user.plan.limitAt}
+                </span>
+              </p>
+              <p className="inline-flex flex-col xl:flex-row xl:items-center text-gray-800">
+                <ChartBarIcon className="w-5 h-5 mr-2" />
+                <span className="font-medium">Burst Limit:</span>
+                <span className="mt-2 ml-2 xl:mt-0">
+                  {user.plan.burstLimit}
+                </span>
+              </p>
+              <p className="inline-flex flex-col xl:flex-row xl:items-center text-gray-800">
+                <ChartBarIcon className="w-5 h-5 mr-2" />
+                <span className="font-medium">Burst Threshold:</span>
+                <span className="mt-2 ml-2 xl:mt-0">
+                  {user.plan.burstThreshold}
+                </span>
+              </p>
+            </div>
+            <div className="grid grid-cols-2 mt-8">
+              <div className="flex items-center">
+                <div className="relative">
+                  <Image
+                    src="https://picsum.photos/102"
+                    alt={app.name}
+                    className="rounded-full w-6 h-6 md:w-8 md:h-8 bg-gray-200"
+                    width={640}
+                    height={360}
+                  />
+                  <span className="absolute top-0 right-0 inline-block w-3 h-3 bg-primary-red rounded-full"></span>
+                </div>
 
-            <span
-              data-tooltip-target="bedrooms"
-              className="cursor-pointer rounded-full border border-gray-500/5 bg-gray-500/5 p-3 text-gray-500 transition-colors hover:border-gray-500/10 hover:bg-gray-500/10 hover:!opacity-100 group-hover:opacity-70"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                aria-hidden="true"
-                className="h-5 w-5"
-              >
-                <path d="M11.47 3.84a.75.75 0 011.06 0l8.69 8.69a.75.75 0 101.06-1.06l-8.689-8.69a2.25 2.25 0 00-3.182 0l-8.69 8.69a.75.75 0 001.061 1.06l8.69-8.69z"></path>
-                <path d="M12 5.432l8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-3a.75.75 0 00-.75.75V21a.75.75 0 01-.75.75H5.625a1.875 1.875 0 01-1.875-1.875v-6.198a2.29 2.29 0 00.091-.086L12 5.43z"></path>
-              </svg>
-            </span>
-
-            <span
-              data-tooltip-target="tv"
-              className="cursor-pointer rounded-full border border-gray-500/5 bg-gray-500/5 p-3 text-gray-500 transition-colors hover:border-gray-500/10 hover:bg-gray-500/10 hover:!opacity-100 group-hover:opacity-70"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                aria-hidden="true"
-                className="h-5 w-5"
-              >
-                <path d="M19.5 6h-15v9h15V6z"></path>
-                <path
-                  fill-rule="evenodd"
-                  d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v11.25C1.5 17.16 2.34 18 3.375 18H9.75v1.5H6A.75.75 0 006 21h12a.75.75 0 000-1.5h-3.75V18h6.375c1.035 0 1.875-.84 1.875-1.875V4.875C22.5 3.839 21.66 3 20.625 3H3.375zm0 13.5h17.25a.375.375 0 00.375-.375V4.875a.375.375 0 00-.375-.375H3.375A.375.375 0 003 4.875v11.25c0 .207.168.375.375.375z"
-                  clip-rule="evenodd"
-                ></path>
-              </svg>
-            </span>
-            <span
-              data-tooltip-target="fire"
-              className="cursor-pointer rounded-full border border-gray-500/5 bg-gray-500/5 p-3 text-gray-500 transition-colors hover:border-gray-500/10 hover:bg-gray-500/10 hover:!opacity-100 group-hover:opacity-70"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                aria-hidden="true"
-                className="h-5 w-5"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M12.963 2.286a.75.75 0 00-1.071-.136 9.742 9.742 0 00-3.539 6.177A7.547 7.547 0 016.648 6.61a.75.75 0 00-1.152-.082A9 9 0 1015.68 4.534a7.46 7.46 0 01-2.717-2.248zM15.75 14.25a3.75 3.75 0 11-7.313-1.172c.628.465 1.35.81 2.133 1a5.99 5.99 0 011.925-3.545 3.75 3.75 0 013.255 3.717z"
-                  clip-rule="evenodd"
-                ></path>
-              </svg>
-            </span>
+                <p className="ml-2 font-medium text-gray-800 line-clamp-1">
+                  {user.username}
+                </p>
+              </div>
+            </div>
           </div>
-        </div>
-        <div className="p-6 pt-3">
-          <button
-            className="block w-full select-none rounded-lg bg-gray-500 py-3.5 px-7 text-center align-middle font-sans text-sm font-bold uppercase text-white shadow-md shadow-gray-500/20 transition-all hover:shadow-lg hover:shadow-gray-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-            type="button"
-            data-ripple-light="true"
-          >
-            Details
-          </button>
-        </div>
+        </a>
       </div>
-    </>
+    </div>
   );
 };
 

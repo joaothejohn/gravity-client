@@ -15,6 +15,7 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import dynamic from 'next/dynamic';
 import type { NextPageWithLayout } from 'types';
+import cookie from 'cookie';
 
 interface RetracedEventsBrowserProps {
   host: string;
@@ -76,13 +77,17 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     };
   }
 
-  const { locale, req, res, query } = context;
+  const { req, res, query, locale } = context;
 
   const session = await getSession(req, res);
   const teamMember = await getTeamMember(
     session?.user.id as string,
     query.slug as string
   );
+
+  const cookies = cookie.parse(req?.headers?.cookie || '');
+  const currentLanguage = cookies['current-language'] || locale;
+
 
   try {
     throwIfNotAllowed(teamMember, 'team_audit_log', 'read');
@@ -94,7 +99,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
     return {
       props: {
-        ...(locale ? await serverSideTranslations(locale, ['common'], null, SUPPORTED_LANGUAGES) : {}),
+        ...(currentLanguage ? await serverSideTranslations(currentLanguage, ['common'], null, SUPPORTED_LANGUAGES) : {}),
         error: null,
         auditLogToken: auditLogToken ?? '',
         retracedHost: env.retraced.url ?? '',
@@ -105,7 +110,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     const { message } = error as { message: string };
     return {
       props: {
-        ...(locale ? await serverSideTranslations(locale, ['common'], null, SUPPORTED_LANGUAGES) : {}),
+        ...(currentLanguage ? await serverSideTranslations(currentLanguage, ['common'], null, SUPPORTED_LANGUAGES) : {}),
         error: {
           message,
         },

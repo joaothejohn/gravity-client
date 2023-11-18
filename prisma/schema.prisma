@@ -55,13 +55,60 @@ model User {
   invitations   Invitation[]
   sessions      Session[]
   teamMembers   TeamMember[]
+  domainId      String?
+  domain        Domain?      @relation(fields: [domainId], references: [id])
+}
+
+model RadiusUser {
+  id       String  @id @default(uuid())
+  username String
+  password String
+  ip       String
+  isActive Boolean @default(false)
+  domainId String
+  domain   Domain? @relation(fields: [domainId], references: [id])
+  planId   String?
+  plan     Plan?   @relation(fields: [planId], references: [id])
+}
+
+model Plan {
+  id             String       @id @default(uuid())
+  name           String
+  maxLimit       String
+  limitAt        String
+  priority       String
+  burstLimit     String?
+  burstThreshold String?
+  burstTime      String?
+  domainId       String
+  domain         Domain?      @relation(fields: [domainId], references: [id])
+  radiusUser     RadiusUser[]
+}
+
+model Domain {
+  id           String         @id @default(uuid())
+  name         String
+  radiusUsers  RadiusUser[]
+  userPlans    Plan[]
+  user         User[]
+  domainRouter DomainRouter[]
+  Team         Team[]
+}
+
+model DomainRouter {
+  id       String @id @default(uuid())
+  name     String
+  ip       String
+  domainId String
+  domain   Domain @relation(fields: [domainId], references: [id])
 }
 
 model Team {
   id          String       @id @default(uuid())
   name        String
   slug        String       @unique
-  domain      String?      @unique
+  domainId    String
+  domain      Domain?      @relation(fields: [domainId], references: [id])
   defaultRole Role         @default(MEMBER)
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @default(now())

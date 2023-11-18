@@ -1,5 +1,5 @@
 import {
-  CodeBracketIcon,
+  UserGroupIcon,
   Cog6ToothIcon,
   LockClosedIcon,
   RectangleStackIcon,
@@ -69,10 +69,10 @@ export default forwardRef<HTMLElement, { isCollapsed: boolean, user?: User }>(
       ],
       team: [
         {
-          name: t('all-products'),
-          href: `/teams/${slug}/products`,
-          icon: CodeBracketIcon,
-          active: activePathname === `/teams/${slug}/products`,
+          name: t('all-customers'),
+          href: `/teams/${slug}/customers`,
+          icon: UserGroupIcon,
+          active: activePathname === `/teams/${slug}/customers`,
         },
         {
           name: t('settings'),
@@ -80,7 +80,7 @@ export default forwardRef<HTMLElement, { isCollapsed: boolean, user?: User }>(
           icon: Cog6ToothIcon,
           active:
             activePathname?.startsWith(`/teams/${slug}`) &&
-            !activePathname.includes('products'),
+            !activePathname.includes('customers'),
         },
       ],
     };
