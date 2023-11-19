@@ -1,10 +1,10 @@
-import { ChartBarIcon, ExclamationTriangleIcon, GlobeAltIcon, PowerIcon, BoltIcon, EllipsisHorizontalCircleIcon } from "@heroicons/react/24/outline";
+import { ChartBarIcon, ExclamationTriangleIcon, GlobeAltIcon, PowerIcon, BoltIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import React from "react";
 import app from "@/lib/app";
 import { IRadiusUserResponse } from "types";
 import { useTranslation } from "react-i18next";
-import { Button } from '@nextui-org/button'; 
+import RadiusUserButtons from '../shared/RadiusUserButtons';
 
 interface RadiusUserCardProps {
   user: IRadiusUserResponse;
@@ -43,14 +43,8 @@ const RadiusUserCard: React.FC<RadiusUserCardProps> = ({ user }) => {
                   height={360}
                 />
               </div>
-              <div className="absolute flex top-0 right-3 mb-3">
-                <p className="mt-2 text-sm text-gray-800 line-clamp-1 top-0 left-0 inline-flex mt-3 ml-3 px-3 py-2 rounded-lg z-10 bg-white text-sm font-medium text-gray-800 select-none">
-                  New York, NY 10004, US
-                </p>
-                <Button className="inline-flex mt-3 ml-3 px-3 py-2 rounded-lg bg-white font-small text-gray-800 overflow-hidden shadow">
-                    <span><EllipsisHorizontalCircleIcon className="w-6 h-6 mr-2" /></span>
-                    <span>Edit</span>
-                </Button>
+              <div className="absolute flex top-3 right-3 mb-3 inline-flex rounded-lg z-10 bg-black text-sm font-medium text-white select-none">
+                <RadiusUserButtons />
               </div>
               {handleStatus(user.isActive)}
             </div>
