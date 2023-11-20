@@ -10,7 +10,7 @@ export default function RadiusUserButtons() {
     <Dropdown>
       <DropdownTrigger>
         <Button 
-          variant="transparent" 
+          variant="ghost" 
         >
           <BoltIcon className="w-6 h-6 mr-2" /> Actions
         </Button>
