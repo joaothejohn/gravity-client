@@ -9,9 +9,7 @@ export default function RadiusUserButtons() {
   return (
     <Dropdown>
       <DropdownTrigger>
-        <Button 
-          variant="ghost" 
-        >
+        <Button>
           <BoltIcon className="w-6 h-6 mr-2" /> Actions
         </Button>
       </DropdownTrigger>

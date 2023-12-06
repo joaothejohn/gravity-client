@@ -43,7 +43,7 @@ const RadiusUserCard: React.FC<RadiusUserCardProps> = ({ user }) => {
                   height={360}
                 />
               </div>
-              <div className="absolute flex top-3 right-3 mb-3 inline-flex rounded-lg z-10 bg-black text-sm font-medium text-white select-none">
+              <div className="absolute flex top-3 right-3 mb-3 inline-flex text-sm font-medium text-white select-none">
                 <RadiusUserButtons />
               </div>
               {handleStatus(user.isActive)}
