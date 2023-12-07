@@ -1,3 +1,4 @@
+import { SVGProps } from "react";
 import type { Prisma } from '@prisma/client';
 
 export type ApiError = {
@@ -94,7 +95,7 @@ export interface IPlanUser {
   burstTime: string
 }
 
-interface IPlan {
+export interface IPlan {
   id: string
   name: string
   maxLimit: string
@@ -127,3 +128,7 @@ export interface IPlanUserResponse {
   burstThreshold: string
   burstTime: string
 }
+
+export type IconSvgProps = SVGProps<SVGSVGElement> & {
+  size?: number;
+};
